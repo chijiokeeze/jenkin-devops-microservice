@@ -1,11 +1,23 @@
 //SCRIPTED
 
 //DECLARATIVE
-node {
-    stage('Build') {
-        echo "Build Stage"
-    }
-    stage('Test Stage'){
-        echo "Test"
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            step {
+                echo "Build Stage"
+            }
+        }
+        stage('test') {
+            step {
+                echo "test Stage"
+            }
+        }
+        stage('Integration test') {
+            step {
+                echo "Integration test Stage"
+            }
+        }
     }
 }
