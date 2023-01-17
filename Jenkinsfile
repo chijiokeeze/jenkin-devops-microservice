@@ -12,7 +12,7 @@ pipeline {
     
     }
     stages {
-        stage('Build') {
+        stage('Checkout') {
             steps {
                 sh "mvn --version"
                 sh "docker version"
@@ -27,14 +27,24 @@ pipeline {
                 echo "EXECUTOR_NUMBER - $env.EXECUTOR_NUMBER"
             }
         }
-        stage('test') {
+        stage('Build & Compile') {
             steps {
-                echo "test Stage"
+                sh "mvn clean compile"
+                echo "compile was Good"
             }
         }
+        
+        stage('test') {
+            steps {
+                sh "mvn test"
+                echo "testing all good"
+            }
+        }
+        
         stage('Integration test') {
             steps {
-                echo "Integration test Stage"
+                sh "mvn failsafe:Integration-test failsafe:verify"
+                echo "int-test and verification approved"
             }
         }
     }
