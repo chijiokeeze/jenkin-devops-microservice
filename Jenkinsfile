@@ -5,11 +5,18 @@ pipeline {
     agent any
     //agent { docker { image 'maven:3.6.3'}}
     //agent { docker { image 'node:13.8'}}
+    environment {
+        dockerLoko = tool 'myDocker'
+        mavenLoko = tool 'myMaven'
+        PATH = "$dockerLoko/bin:$mavenLoko/bin:$PATH"
+    
+    }
     stages {
         stage('Build') {
             steps {
-                //sh "mvn --version"
-                //sh "node --version"
+                sh "mvn --version"
+                sh "docker version"
+                sh "docker images ls"
                 echo "Build Stage"
                 echo "PATH - $PATH"
                 echo "BUILD_NUMBER - $env.BUILD_NUMBER"
