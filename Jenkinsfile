@@ -7,7 +7,6 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh "docker image ls"
                 sh "mvn --version"
                 echo "Build Stage"
             }
