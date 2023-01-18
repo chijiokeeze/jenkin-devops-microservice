@@ -66,7 +66,7 @@ pipeline {
                 script {
                     docker.withRegistry('', 'dockerhubpass') {
                         dockerImage.push();
-                        dockerImage.push('latest')
+                        dockerImage.push('latest');
                     }
                    
                 }
