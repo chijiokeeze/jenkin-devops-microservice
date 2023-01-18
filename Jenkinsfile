@@ -9,7 +9,6 @@ pipeline {
         dockerLoko = tool 'myDocker'
         mavenLoko = tool 'myMaven'
         PATH = "$dockerLoko/bin:$mavenLoko/bin:$PATH"
-    
     }
     stages {
         stage('Checkout') {
@@ -47,16 +46,32 @@ pipeline {
                 echo "int-test and verification approved"
             }
         }
+        stage('Package app') {
+            steps {
+                sh "mvn package -DskipTests"
+                echo "int-test and verification approved"
+            }
+        }
+       stage('Building Docker image') {
+            steps {
+                //"docker build -t cj15/jenkin_devops_microservice:$env.BUILD_TAG"
+                script {
+                    dockerImage = docker.build("cj15/jenkin_devops_microservice:${env.BUILD_TAG}")
+                }
+                echo "at this point docker image has been built"
+            }
+        }
+       stage('Push Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry('', 'dockerhubpass') {
+                        dockerImage.push();
+                        dockerImage.push('latest')
+                    }
+                   
+                }
+                echo "docker image with build tag ${env.BUILD_TAG} has been pushed!!!"
+            }
+        }
     }
-    post{
-        always{
-            echo "i indeed do run always"
-        }
-        success{
-            echo "i run only when successful"
-        }
-        failure{
-            echo "i run only when failed"
-        }
-    }
-}
+}	
